@@ -2,32 +2,34 @@
 
 namespace App\Entity;
 
-use App\Repository\MenuRepository;
+use App\Repository\OrdersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MenuRepository::class)]
-class Menu
+#[ORM\Entity(repositoryClass: OrdersRepository::class)]
+class Orders
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Bookings $booking = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $manager = null;
 
-    #[ORM\Column]
-    private ?bool $available = null;
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?OrderStatus $status = null;
 
     /**
      * @var Collection<int, OrdersElements>
      */
-    #[ORM\OneToMany(targetEntity: OrdersElements::class, mappedBy: 'menu')]
+    #[ORM\OneToMany(targetEntity: OrdersElements::class, mappedBy: 'mainOrder')]
     private Collection $ordersElements;
 
     public function __construct()
@@ -40,38 +42,38 @@ class Menu
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getBooking(): ?Bookings
     {
-        return $this->name;
+        return $this->booking;
     }
 
-    public function setName(string $name): static
+    public function setBooking(?Bookings $booking): static
     {
-        $this->name = $name;
+        $this->booking = $booking;
 
         return $this;
     }
 
-    public function getType(): ?string
+    public function getManager(): ?User
     {
-        return $this->type;
+        return $this->manager;
     }
 
-    public function setType(string $type): static
+    public function setManager(?User $manager): static
     {
-        $this->type = $type;
+        $this->manager = $manager;
 
         return $this;
     }
 
-    public function isAvailable(): ?bool
+    public function getStatus(): ?OrderStatus
     {
-        return $this->available;
+        return $this->status;
     }
 
-    public function setAvailable(bool $available): static
+    public function setStatus(?OrderStatus $status): static
     {
-        $this->available = $available;
+        $this->status = $status;
 
         return $this;
     }
@@ -88,7 +90,7 @@ class Menu
     {
         if (!$this->ordersElements->contains($ordersElement)) {
             $this->ordersElements->add($ordersElement);
-            $ordersElement->setMenu($this);
+            $ordersElement->setMainOrder($this);
         }
 
         return $this;
@@ -98,8 +100,8 @@ class Menu
     {
         if ($this->ordersElements->removeElement($ordersElement)) {
             // set the owning side to null (unless already changed)
-            if ($ordersElement->getMenu() === $this) {
-                $ordersElement->setMenu(null);
+            if ($ordersElement->getMainOrder() === $this) {
+                $ordersElement->setMainOrder(null);
             }
         }
 
