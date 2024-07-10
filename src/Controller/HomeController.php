@@ -22,7 +22,13 @@ class HomeController extends AbstractController
         $username = $user->getUsername();
         $role = $user->getRoles()[0]; // Assuming only one role per user
 
-        // Render the home page with user data
+        if ($role === 'ROLE_ADMIN') {
+            return $this->render('home/admin/index.html.twig', [
+                'username' => $username,
+                'role' => $role,
+            ]);
+        }
+
         return $this->render('home/index.html.twig', [
             'username' => $username,
             'role' => $role,
