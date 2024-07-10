@@ -1,0 +1,14 @@
+<div id="popup-form-menu" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h2 class="text-xl mb-4">Ajouter un Produit</h2>
+      {{ form_start(form) }}
+          {{ form_row(form.name) }}
+          {{ form_row(form.type) }}
+          {{ form_row(form.available) }}
+          <div class="flex justify-end mt-4">
+              <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" id="cancel-button">Annuler</button>
+              <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter</button>
+          </div>
+      {{ form_end(form) }}
+  </div>
+</div>
