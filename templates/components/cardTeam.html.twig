@@ -7,6 +7,7 @@
             <option value="Service" {% if person.roles[0] == 'Service' %}selected{% endif %}>Service</option>
             <option value="Bar" {% if person.roles[0] == 'Bar' %}selected{% endif %}>Bar</option>
             <option value="Cuisine" {% if person.roles[0] == 'Cuisine' %}selected{% endif %}>Cuisine</option>
+            <option value="Repos" {% if person.roles[0] == 'Repos' %}selected{% endif %}>Repos</option>
         </select>
         <button class="save-role hidden" data-user-id="{{ person.id }}">
           <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
