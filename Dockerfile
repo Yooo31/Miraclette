@@ -35,7 +35,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer install --no-scripts --no-autoloader
 
 # Exposer le port 80
-EXPOSE 80
+EXPOSE 90
 
 # Commande par défaut pour lancer Apache
 CMD ["apache2-foreground"]
