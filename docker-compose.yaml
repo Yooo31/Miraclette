@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:5.7
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8090:80"
+    volumes:
+      - .:/var/www/html:delegated
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3307/${MYSQL_DATABASE}?serverVersion=5.7&charset=utf8mb4"
+    command: >
+      sh -c "php bin/console cache:clear && apache2-foreground"
+
+volumes:
+  db-data:
