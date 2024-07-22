@@ -36,7 +36,7 @@ class HomeController extends AbstractController
 
             if ($file && $file->getClientOriginalExtension() === 'pdf') {
                 $tempDir = $this->getParameter('kernel.project_dir') . '/temp';
-                $tempFilePath = $tempDir . '/document.pdf';
+                $tempFilePath = $tempDir . '/menu-casa-catherina.pdf';
 
                 // Assure-toi que le dossier temporaire existe
                 if (!is_dir($tempDir)) {
@@ -45,7 +45,7 @@ class HomeController extends AbstractController
 
                 try {
                     // Sauvegarde le fichier dans le répertoire temporaire
-                    $file->move($tempDir, 'document.pdf');
+                    $file->move($tempDir, 'menu-casa-catherina.pdf');
                     $this->addFlash('success', 'Fichier téléchargé avec succès!');
                 } catch (FileException $e) {
                     $this->addFlash('error', 'Erreur lors du téléchargement du fichier.' . $e->getMessage());
