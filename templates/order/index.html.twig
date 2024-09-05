@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<section class="bg-white dark:bg-gray-900">
+    <div class="w-1/2 py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
+        <div class="mx-auto mb-8 max-w-screen-sm lg:mb-16">
+            <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Bonjour {{ first_name }}, {{ role }}</h1>
+        </div>
+
+        {% for element in menu %}
+            <div class="w-full flex items-center justify-between mb-4 order-line" data-id="{{ element.id }}">
+                <div class="w-1/3 border p-4 bg-gray-100 rounded-lg text-left dark:bg-gray-800 dark:text-white">
+                    <h3 class="text-lg font-bold">{{ element.name }}</h3>
+                </div>
+
+                <div class="w-2/3 flex items-center justify-center space-x-4">
+                    <button class="decrease-button bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-lg dark:bg-gray-600 dark:text-white" data-id="{{ element.id }}">
+                        -
+                    </button>
+                    <span class="text-lg font-medium text-gray-700 dark:text-white" id="quantity-{{ element.id }}">0</span>
+                    <button class="increase-button bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-lg dark:bg-gray-600 dark:text-white" data-id="{{ element.id }}">
+                        +
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="w-full flex items-center justify-between mt-6">
+            <input type="number" id="idTableInput" class="w-1/3 border p-4 bg-gray-100 rounded-lg text-gray-700 dark:bg-gray-800 dark:text-white" placeholder="N° de Table" required>
+            <button id="sendRequest" class="w-1/3 mx-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg dark:bg-blue-500 dark:hover:bg-blue-600">
+                Valider
+            </button>
+        </div>
+        <div id="error-message" class="text-red-500 hidden mt-2">
+            Champ obligatoire
+        </div>
+    </div>
+</section>
+{% endblock %}

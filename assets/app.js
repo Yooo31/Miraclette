@@ -12,3 +12,4 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 import './roles.js';
 import './menu.js';
 import './bookings.js';
+import './order.js';

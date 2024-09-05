@@ -9,19 +9,7 @@
                 <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Bonjour {{ first_name }}, {{ role }}</h1>
             </div>
 
-            {% block activity %}{% endblock %}
-
-            {# {% if role == "Service" %}
-                {% include 'home/_service.html.twig' %}
-            {% elseif role == "Bar" %}
-                <h1>Bar</h1>
-            {% elseif role == "Cuisine"  %}
-                <h1>Cuisine</h1>
-            {% elseif role == "Repos" %}
-                <h1>Tu ne travails pas aujourd'hui.</h1>
-            {% else %}
-                Sold-out!
-            {% endif %} #}
+            {% block content %}{% endblock %}
         </div>
     </section>
 {% endblock %}
