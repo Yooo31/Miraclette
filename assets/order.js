@@ -44,26 +44,26 @@ document.addEventListener('DOMContentLoaded', function () {
           }
       });
 
-      console.log(orderLines);
-      // fetch('/order/new', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(orderLines),
-      // })
-      // .then(response => response.json())
-      // .then(data => {
-      //     if (data.success) {
-      //         alert('Commande validée');
-      //         location.reload(); // Recharge la page pour voir la commande validée
-      //     } else {
-      //         alert('Erreur lors de la validation de la commande');
-      //     }
-      // })
-      // .catch(error => {
-      //     console.error('Error:', error);
-      //     alert('Erreur lors de la validation de la commande');
-      // });
+      console.log(JSON.stringify(orderLines));
+
+      fetch('/order/new', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderLines),
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+            // window.location.href = '/order/success';
+          } else {
+              alert('Erreur lors de la validation de la commande');
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Erreur lors de la validation de la commande');
+      });
   });
 });
