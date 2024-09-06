@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\OrdersRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(OrdersRepository $ordersRepository): Response
     {
         $user = $this->getUser();
 
@@ -33,11 +34,13 @@ class HomeController extends AbstractController
                 'role' => $role,
             ]);
         } else if ($role === 'Service') {
+            $orderList = $ordersRepository->findAll();
+
             return $this->render('home/service/index.html.twig', [
                 'username' => $username,
                 'first_name' => $first_name,
                 'role' => $role,
-                'orders' => []
+                'orders' => $orderList
             ]);
         }
     }
