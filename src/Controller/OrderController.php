@@ -71,6 +71,12 @@ class OrderController extends AbstractController
         return new JsonResponse(['success' => true, 'message' => 'Commande validée']);
     }
 
+    #[Route('/success', name: 'success')]
+    public function success(): Response
+    {
+        return $this->render('order/success.html.twig');
+    }
+
     private function setOrders($clientId, $entityManager) {
         $user = $this->getUser();
 
