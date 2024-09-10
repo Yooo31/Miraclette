@@ -13,3 +13,4 @@ import './roles.js';
 import './menu.js';
 import './bookings.js';
 import './order.js';
+import './cuisine.js';

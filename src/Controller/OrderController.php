@@ -9,6 +9,8 @@ use App\Entity\OrdersElements;
 use App\Entity\OrderStatus;
 use App\Entity\User;
 use App\Repository\MenuRepository;
+use App\Repository\OrdersElementsRepository;
+use App\Repository\OrdersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,6 +77,45 @@ class OrderController extends AbstractController
     public function success(): Response
     {
         return $this->render('order/success.html.twig');
+    }
+
+    #[Route('/details/{id}', name: 'details')]
+    public function getOrderDetails(int $id, OrdersElementsRepository $ordersElementsRepository, OrdersRepository $ordersRepository): JsonResponse
+    {
+        $order = $ordersRepository->findOneBy(['id' => $id]);
+
+        if (!$order) {
+            throw $this->createNotFoundException('Commande non trouvée');
+        }
+
+        $elements = $ordersElementsRepository->findAllByOrderId($order);
+
+        $menuData = [];
+
+        foreach ($elements as $element) {
+            $menu = $element->getMenu();
+            $menuId = $menu ? $menu->getId() : null;
+            $menuName = $menu ? $menu->getName() : 'Inconnu';
+
+            if ($menuId !== null) {
+                if (isset($menuData[$menuId])) {
+                    $menuData[$menuId]['count'] += 1;
+                } else {
+                    $menuData[$menuId] = [
+                        'id' => $menuId,
+                        'name' => $menuName,
+                        'count' => 1,
+                    ];
+                }
+            }
+        }
+
+        $orderData = [
+            'id' => $order->getId(),
+            'menus' => array_values($menuData)
+        ];
+
+        return $this->json($orderData);
     }
 
     private function setOrders($clientId, $entityManager) {

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Orders;
 use App\Entity\OrdersElements;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,15 @@ class OrdersElementsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrdersElements::class);
+    }
+
+    public function findAllByOrderId(Orders $orderId): array
+    {
+        return $this->createQueryBuilder('oe')
+            ->andWhere('oe.mainOrder= :orderId')
+            ->setParameter('orderId', $orderId)
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

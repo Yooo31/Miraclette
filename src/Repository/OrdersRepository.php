@@ -16,6 +16,24 @@ class OrdersRepository extends ServiceEntityRepository
         parent::__construct($registry, Orders::class);
     }
 
+    public function findOneById(int $id): ?Orders
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findAllActiveOrders(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.status = 1 OR o.status = 2')
+            ->orderBy('o.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Orders[] Returns an array of Orders objects
     //     */

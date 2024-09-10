@@ -1,0 +1,11 @@
+{% set bgClass = '' %}
+
+{% if name == 'En cours' %}
+    {% set bgClass = 'bg-red-900 text-red-300' %}
+{% elseif name == 'Prêt' %}
+    {% set bgClass = 'bg-green-900 text-green-300' %}
+{% else %}
+    {% set bgClass = '' %}
+{% endif %}
+
+<span class="{{ bgClass }} ml-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">{{ name }}</span>

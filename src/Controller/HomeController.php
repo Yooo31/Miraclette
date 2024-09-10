@@ -42,6 +42,17 @@ class HomeController extends AbstractController
                 'role' => $role,
                 'orders' => $orderList
             ]);
+        } else if ($role === 'Cuisine') {
+            $orderList = $ordersRepository->findAllActiveOrders();
+
+            return $this->render('home/cuisine/index.html.twig', [
+                'username' => $username,
+                'first_name' => $first_name,
+                'role' => $role,
+                'orders' => $orderList
+            ]);
+        } else {
+            throw new \LogicException('User role is not valid.');
         }
     }
 }

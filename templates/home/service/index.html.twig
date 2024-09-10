@@ -11,21 +11,11 @@
 
     {% if orders %}
       {% for order in orders %}
-        {% set bgClass = '' %}
-
-        {% if order.status.name == 'En cours' %}
-            {% set bgClass = 'bg-red-900 text-red-300' %}
-        {% elseif order.status.name == 'Prêt' %}
-            {% set bgClass = 'bg-green-900 text-green-300' %}
-        {% else %}
-            {% set bgClass = '' %}
-        {% endif %}
-
         <div id="commandId" class="w-1/2 mx-auto text-center text-gray-500 dark:text-gray-400 border p-4 mt-12">
           <h3 class="mb-1 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">Table n°{{ order.booking.location }}</h3>
           <h4 class="mb-1 text-lg font-semibold tracking-tight text-gray-900 dark:text-white flex items-center justify-center">
             Status
-            <span class="{{ bgClass }} ml-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">{{ order.status.name }}</span>
+            {% include 'components/badge.html.twig' with {'name': order.status.name} %}
           </h4>
           <p class="font-light text-sm text-gray-500 dark:text-gray-400 flex justify-center items-center">
             <span class="flex-grow border-t border-gray-300 mx-2"></span> Voir plus <span class="flex-grow border-t border-gray-300 mx-2"></span>
