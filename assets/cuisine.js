@@ -39,10 +39,35 @@ document.querySelectorAll('.orderCard').forEach(card => {
             item.classList.toggle('line-through');
           });
         });
+
+        const statusSelect = document.getElementById('status-select');
+        statusSelect.value = data.status;
+
+        statusSelect.addEventListener('change', function() {
+          const newStatus = this.value;
+
+          fetch(`/order/update-status/${orderId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: newStatus })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              window.location.reload();
+            } else {
+              alert('Erreur lors de la mise à jour du statut:', data.error);
+            }
+          })
+          .catch(error => console.error('Error updating status:', error));
+        });
       })
       .catch(error => console.error('Erreur:', error));
   });
 });
+
 
 document.getElementById('close-popup').addEventListener('click', function() {
   document.getElementById('order-popup').classList.add('hidden');

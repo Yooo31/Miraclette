@@ -11,6 +11,8 @@ use App\Entity\User;
 use App\Repository\MenuRepository;
 use App\Repository\OrdersElementsRepository;
 use App\Repository\OrdersRepository;
+use App\Repository\OrderStatusRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -116,6 +118,55 @@ class OrderController extends AbstractController
         ];
 
         return $this->json($orderData);
+    }
+
+    #[Route('/update-status/{id}', name: 'update-status', methods: ['POST'])]
+    public function updateStatus($id, Request $request, OrdersRepository $ordersRepository, OrderStatusRepository $orederStatusRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $order = $ordersRepository->findOneBy(['id' => $id]);
+
+        if (!$order) {
+            return new JsonResponse(['error' => 'Order not found'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $newStatus = $data['status'] ?? null;
+
+        $orderStatus = $orederStatusRepository->findOneBy(['name' => $newStatus]);
+
+        if (!$orderStatus) {
+            return new JsonResponse(['error' => 'Invalid status'], 400);
+        }
+
+        $order->setStatus($orderStatus);
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => 'Status updated']);
+    }
+
+    #[Route('/closed', name: 'closed')]
+    public function closedOrders(OrdersRepository $ordersRepository): Response
+    {
+        $user = $this->getUser();
+
+        if ($user instanceof User) {
+            $username = $user->getUsername();
+            $first_name = $user->getFirstName();
+            $role = $user->getRoles()[0];
+        } else {
+            throw new \LogicException('User is not of type App\Entity\User.');
+        }
+
+        $orderList = $ordersRepository->findAllClosedOrders();
+
+            return $this->render('home/cuisine/index.html.twig', [
+                'orders' => $orderList,
+                'username' => $username,
+                'first_name' => $first_name,
+                'role' => $role,
+                'orders' => $orderList
+            ]);
     }
 
     private function setOrders($clientId, $entityManager) {

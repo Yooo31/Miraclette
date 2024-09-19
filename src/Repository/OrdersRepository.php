@@ -34,6 +34,15 @@ class OrdersRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllClosedOrders(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.status = 3')
+            ->orderBy('o.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Orders[] Returns an array of Orders objects
     //     */
